@@ -43,24 +43,31 @@ app.get("/read-files", async (req, res) => {
 
 // Ruta para hacer la consulta a OpenAI
 /* app.post('/ask', express.json(), async (req, res) => {
-    const question = req.body.question;
-    const textContent = req.body.textContent;
+  const { question, textContent } = req.body;
 
-    const response = await fetch('https://api.openai.com/v1/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': Bearer ${process.env.OPENAI_API_KEY}
-        },
-        body: JSON.stringify({
-            model: 'gpt-4',
-            prompt: ${textContent}\n\nPregunta: ${question}\nRespuesta:,
-            max_tokens: 150
-        })
-    });
+  try {
+      const response = await fetch('https://api.openai.com/v1/completions', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` // Se usa correctamente la interpolación
+          },
+          body: JSON.stringify({
+              model: 'gpt-4',
+              prompt: `${textContent}\n\nPregunta: ${question}\nRespuesta:`, // Corrección en la interpolación de variables
+              max_tokens: 150
+          })
+      });
 
-    const data = await response.json();
-    res.json({ answer: data.choices[0].text.trim() });
+      if (!response.ok) {
+          throw new Error(`Error en la API de OpenAI: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      res.json({ answer: data.choices[0].text.trim() });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 }); */
 
 // Consulta LLM STUDIO
@@ -68,8 +75,12 @@ app.post("/ask", express.json(), async (req, res) => {
   const question = req.body.question;
   const textContent = req.body.textContent;
 
+  let gptComplementions = '/v1/chat/completions'
+  let localUrl = 'http://localhost:8000'+gptComplementions
+  let ngrokUrl = 'https://a721-2806-2a0-e26-8120-108a-6ddb-5538-72c4.ngrok-free.app'+gptComplementions
+
   const response = await fetch(
-    "https://6847-2806-2a0-e26-8120-74d5-8f31-4ef3-abdb.ngrok-free.app/v1/chat/completions",
+    ngrokUrl,
     {
       method: "POST",
       headers: {
@@ -82,7 +93,7 @@ app.post("/ask", express.json(), async (req, res) => {
           {
             role: "system",
             content:
-              "Eres un bot que resuelve dudas a la medida, amable y cortes.",
+              "Eres un bot que resuelve dudas a la medida, amable y cortes. Lee toda la pregunta y contesta con base al texto",
           },
           { role: "user", content: `${textContent}\n\nPregunta: ${question}` },
         ],
