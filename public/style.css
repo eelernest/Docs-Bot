@@ -4,6 +4,10 @@ body{
 }
 .row{
     border: none;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .container-fluid {
   border-radius: 20px;
@@ -17,17 +21,18 @@ body{
 .body-container {
     padding: 10px;
   width: 100%;
-  height: 350px;
+  height: 50%;
   margin: 0px;
 }
 .body-container .response-main-container {
   width: 100%;
-  height:80%;
+  height:85%;
   border-radius: 8px;
   background-color: rgb(247, 247, 247);
   overflow-y: scroll;
 }
 #response{
+  padding: 10px;
     color: rgb(58, 58, 58);
 }
 .send-container {
