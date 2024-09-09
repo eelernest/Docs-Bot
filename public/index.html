@@ -15,23 +15,24 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-        
         <div class="head-container">
           <div class="h3">docs - bot</div>
         </div>
 
         <div class="body-container">
-
           <img src="./img/profile.png" width="50px" alt="" />
 
           <div class="response-main-container mt-2">
             <div class="fw-normal" id="response"></div>
+            <div id="load" class="spinners-animated hidden">
+              <div class="spinner1"></div>
+              <div class="spinner2"></div>
+              <div class="spinner3"></div>
+            </div>
           </div>
-
         </div>
 
-        <div class="send-container">
-
+        <div  class="send-container">
           <div class="mb-4">
             <textarea
               class="form-control fw-normal"
@@ -41,8 +42,7 @@
             ></textarea>
           </div>
 
-          <button onclick="askQuestion()">Enviar</button>
-
+          <button id="sendBtn" onclick="askQuestion()">Enviar</button>
         </div>
       </div>
     </div>

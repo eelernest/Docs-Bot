@@ -80,7 +80,7 @@ app.post("/ask", express.json(), async (req, res) => {
   let ngrokUrl = 'https://a721-2806-2a0-e26-8120-108a-6ddb-5538-72c4.ngrok-free.app'+gptComplementions
 
   const response = await fetch(
-    ngrokUrl,
+    localUrl,
     {
       method: "POST",
       headers: {
