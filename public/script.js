@@ -7,7 +7,7 @@ send.addEventListener("click", async () => {
   spinners.classList.remove("hidden");
   
   // Limpiar respuesta previa
-  responseElement.innerText = "Procesando...";
+  responseElement.innerText = "";
   
   await askQuestion();
 });
