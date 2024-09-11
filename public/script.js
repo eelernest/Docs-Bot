@@ -1,9 +1,14 @@
 const spinners = document.getElementById("load");
 const send = document.getElementById("sendBtn");
+const responseElement = document.getElementById("response");
 
 // Agrega animacion de espera
 send.addEventListener("click", async () => {
   spinners.classList.remove("hidden");
+  
+  // Limpiar respuesta previa
+  responseElement.innerText = "Procesando...";
+  
   await askQuestion();
 });
 
@@ -23,7 +28,9 @@ async function askQuestion() {
   });
 
   const data = await response.json();
-  document.getElementById("response").innerText = data.answer;
+  
+  // Mostrar la respuesta solo una vez
+  responseElement.innerText = data.answer;
 
   // Detiene animacion
   spinners.classList.add("hidden");

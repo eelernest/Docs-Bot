@@ -35,11 +35,15 @@ async function loadAllDocx(folderPath) {
 }
 
 // Lee y combina todos los archivos Word
-app.get("/read-files", async (req, res) => {
-  const textContent = await loadAllDocx("./files"); //Maneja todos los archivos
+let cachedTextContent = null;
 
-  res.json({ textContent });
+app.get("/read-files", async (req, res) => {
+  if (!cachedTextContent) {
+    cachedTextContent = await loadAllDocx("./files"); // Cargar solo la primera vez
+  }
+  res.json({ textContent: cachedTextContent });
 });
+
 
 // Ruta para hacer la consulta a OpenAI
 /* app.post('/ask', express.json(), async (req, res) => {
