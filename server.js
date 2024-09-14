@@ -81,7 +81,7 @@ app.post("/ask", express.json(), async (req, res) => {
 
   let gptComplementions = '/v1/chat/completions'
   let localUrl = 'http://localhost:8000'+gptComplementions
-  let ngrokUrl = 'https://4323-2806-2a0-e26-8120-9113-54ee-4c59-5ca5.ngrok-free.app'+gptComplementions
+  let ngrokUrl = 'https://c7ae-2806-2a0-e26-8120-9113-54ee-4c59-5ca5.ngrok-free.app'+gptComplementions
 
   const response = await fetch(
     ngrokUrl,
