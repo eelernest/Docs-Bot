@@ -46,36 +46,60 @@ app.get("/read-files", async (req, res) => {
 
 
 // Ruta para hacer la consulta a OpenAI
-/* app.post('/ask', express.json(), async (req, res) => {
-  const { question, textContent } = req.body;
+// Consulta OpenAI
+app.post("/ask", express.json(), async (req, res) => {
+  const question = req.body.question;
+  const textContent = req.body.textContent;
+
+  // URL de la API de OpenAI
+  const openaiUrl = 'https://api.openai.com/v1/chat/completions';
 
   try {
-      const response = await fetch('https://api.openai.com/v1/completions', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` // Se usa correctamente la interpolación
-          },
-          body: JSON.stringify({
-              model: 'gpt-4',
-              prompt: `${textContent}\n\nPregunta: ${question}\nRespuesta:`, // Corrección en la interpolación de variables
-              max_tokens: 150
-          })
-      });
-
-      if (!response.ok) {
-          throw new Error(`Error en la API de OpenAI: ${response.statusText}`);
+    // Petición a la API de OpenAI
+    const response = await fetch(
+      openaiUrl,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, // Usar clave de OpenAI
+        },
+        body: JSON.stringify({
+          model: "gpt-4",  // Modelo de OpenA
+          messages: [
+            {
+              role: "system",
+              content:
+                "Eres un bot que resuelve dudas a la medida, amable y cortes. Lee toda la pregunta y contesta con base al texto",
+            },
+            { role: "user", content: `${textContent}\n\nPregunta: ${question}` },
+          ],
+          temperature: 0.7,
+        }),
       }
+    );
 
-      const data = await response.json();
-      res.json({ answer: data.choices[0].text.trim() });
+    const data = await response.json();
+    
+    // Imprime la respuesta completa para depuración
+    console.log('Respuesta de la API de OpenAI:', data);
+
+    // Verifica que la respuesta tenga el formato esperado
+    if (data.choices && data.choices.length > 0) {
+      res.json({ answer: data.choices[0].message.content.trim() });
+    } else {
+      res.status(500).json({ error: "No se recibió una respuesta válida de OpenAI" });
+    }
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    console.error('Error al consultar OpenAI:', error);
+    res.status(500).json({ error: "Error al consultar OpenAI" });
   }
-}); */
+});
+
+
 
 // Consulta LLM STUDIO
-app.post("/ask", express.json(), async (req, res) => {
+/* app.post("/ask", express.json(), async (req, res) => {
   const question = req.body.question;
   const textContent = req.body.textContent;
 
@@ -108,7 +132,7 @@ app.post("/ask", express.json(), async (req, res) => {
 
   const data = await response.json();
   res.json({ answer: data.choices[0].message.content.trim() });
-});
+}); */
 
 // Función para leer DOCX
 async function loadDocx(filePath) {
